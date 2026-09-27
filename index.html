@@ -99,14 +99,20 @@
         <option value="">Select your batch</option>
       </select>
 
-      <label for="student">Name</label>
-      <select id="student" required disabled>
-        <option value="">Select your batch first</option>
-      </select>
+      <div id="nameWrap">
+        <label for="student">Name</label>
+        <select id="student" required disabled>
+          <option value="">Select your batch first</option>
+        </select>
+      </div>
 
       <div class="chip" id="chip"></div>
 
       <div class="manual" id="manual">
+        <div id="mBatchWrap" style="display:none">
+          <label for="mBatch">Your batch</label>
+          <input type="text" id="mBatch" autocapitalize="characters" placeholder="e.g. CAT 2611">
+        </div>
         <label for="mName">Full name</label>
         <input type="text" id="mName" autocomplete="name" placeholder="As registered with IMS">
         <label for="mPin">IMS Pin</label>
@@ -149,25 +155,31 @@
 <script>
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHwI3HNP5WzflkWH1g54oGJ179pFpYuiPkOIgaRrw-YtAwtrRxQSt_RMyHZOYN7atVhw/exec";
 var TOTAL_SEATS = 170;
-var CANT_FIND = "__CANT_FIND__";
+var CANT_FIND = "__CANT_FIND__", CANT_BATCH = "__CANT_BATCH__";
 
 // Batch -> [[IMS Pin, Name, Mentor], ...]
 var ROSTER = {"CAT 2601":[["IMS0001142842","Devarsh Prajapati","RL"],["IMS0001064869","Pankti Dave","RL"],["IMS0001142843","Renish Dolar","RL"],["IMS0001109208","Shrusti Panchal","RL"],["IMS0001142056","Yuti Acharya","RL"]],"CAT 2602":[["IMS0001110276","Dhairya Mehta","RL"],["IMS0001147136","Teerth Nirmal Shrishrimal","RL"]],"CAT 2603":[["IMS0001159888","Ajit Kaswan","AK"],["IMS0001095549","Margeen Javia","AK"]],"CAT 2604":[["IMS0001154434","Jayani Bhatt","AB"],["IMS0001155001","Meet Shah","AB"]],"CAT 2605":[["IMS0001160238","Ayush Karia","AK"],["IMS0001009514","Keval Lad","AK"],["STU0001169909","Tanisha Bansal","AK"],["IMS0001159389","Tiksha Karnavat","AK"]],"CAT 2606":[["IMS0001074406","Heet Shah","AK"]],"CAT 2607":[["IMS0001160188","Devanshi Jain","MA"],["STU0001174533","Jaival Bhavsar","MA"],["STU0001185285","Mitwa Purohit","MA"]],"CAT 2608":[["STU0001199499","Dhairya Agarwal","MS"],["STU0001179359","Dhruv Vora","MS"],["STU0001198127","Kairavi Shah","MS"],["STU0001203444","Kush Maheshwari","MS"],["STU0001188989","Moksh Shah","MS"],["STU0001202769","Paavan Maheshwari","MS"],["STU0001180122","Pratham Shah","MS"],["STU0001188441","Rena Patel","MS"]],"CAT 2609":[["STU0001196023","Parth Gondaliya","GU"],["STU0001193165","Sahadev Paruparla","GU"],["STU0001196972","Suhani Maheshwari","GU"]],"CAT 2611":[["STU0001203012","Aaditya Gajra","RL"],["IMS0000855080","Ananya Shreya","RL"],["STU0001173059","Himanshi Kumar","RL"],["STU0001203020","Jeeya Dedakiya","RL"],["IMS0000985340","Jhanvi Gandhi","RL"],["IMS0000912869","Kaivan Mehta","RL"],["IMS0000965358","Krish Parekh","RL"],["STU0001189601","Krishna Rathod","RL"],["IMS0001078806","Krutartha Nasit","RL"],["IMS0001037281","Kush Baid","RL"],["STU0001203559","Kushagra Japra","RL"],["STU0001165759","Miti Kotecha","RL"],["STU0001203432","Parth Guna","RL"],["IMS0001001418","Prisha Vipul Joshi","RL"],["IMS0000933708","Sadhya Lakhani","RL"],["STU0001203417","Saumya","RL"],["STU0001203275","Shreya Bhat","RL"],["IMS0001099404","Swaroop Maheshwari","RL"],["STU0001203243","Vartika","RL"]],"CAT 2612":[["STU0001208073","Nishva Patel","GU"]],"CAT 2614":[["STU0001186746","Freya Shah","GU"]],"CAT 2616":[["STU0001218696","Dhyani Dave","RL"],["STU0001189451","Himani Parikh","RL"],["STU0001210081","Hitarth Unjia","RL"],["IMS0001162414","Ishit Dave","RL"],["STU0001210655","Karen Chhaya","RL"],["IMS0000982761","Raunak Kumar","RL"],["STU0001203515","Suhani Gandhi","RL"],["STU0001209643","Tisha Shah","RL"],["STU0001206829","Vanshika Shah","RL"],["STU0001226593","Vanya Kabra","RL"],["STU0001212338","Vishvam Patel","RL"],["IMS0001088145","Yashika Rajgarhia","RL"]],"CAT 2617":[["STU0001218459","Aayush Sharma","RL"],["STU0001176678","Aditya Aswani","RL"],["STU0001222015","Arshiya Bajaj","RL"],["STU0001223853","Ashana Shah","RL"],["STU0001203541","Nehal Jain","RL"]],"CAT 2618":[["STU0001230323","Jagdish Luharr","RG"],["STU0001235868","Jayvat Shah","RG"],["STU0001230221","Kavya Dholariya","RG"],["STU0001196360","Rudra Mehta","RG"],["STU0001199973","Suchita Gaddam","RG"]],"CAT 2619":[["STU0001221314","Krish Mehta","MA"],["STU0001221560","Netra Agrawal","MA"],["STU0001217742","Priyal Gadhiya","MA"]],"CAT 2621":[["STU0001223704","Bhavpreet Kaur","MA"],["STU0001199651","Lakshita Chaudhary","MA"]],"CAT 2622":[["IMS0001139376","Bhavya Vasavada","RL"],["STU0001208307","Dimpy Vachhrajani","RL"],["STU0001227697","Rena Malhotra","RL"],["IMS0001119920","Setu Parmar","RL"],["STU0001218941","Siddharth Maru","RL"],["IMS0001083980","Tatva Shah","RL"]],"CAT 2623":[["STU0001225337","Darshi Parekh","MA"],["STU0001231342","Nidhi Sharma","MA"],["STU0001228470","Varun Khatri","MA"]],"CAT 2624":[["IMS0001027668","Denim Kumar","RG"],["STU0001233919","Ishan Chaturvedi","RG"],["STU0001235592","Khushi Upadhyay","RG"],["STU0001235326","Meet Bhanushali","RG"],["STU0001232901","Parth Dave","RG"],["STU0001235165","Pranshu Shah","RG"],["STU0001235942","Ruchir Patel","RG"],["STU0001212815","Vishwa Saglani","RG"]],"CAT 2625":[["STU0001237693","Abhishek Tripathi","GU"],["STU0001238277","Shrey Aghera","GU"],["STU0001232988","Vansh Kotak","GU"]],"CAT 2626":[["STU0001234141","Abhinav Mistry","RL"],["STU0001231819","Avani Soni","RL"],["STU0001235114","Dhanesha Patel","RL"],["STU0001233778","Eesha Gupta","RL"],["STU0001234034","Harsh Agarwal","RL"],["STU0001186382","Harsh Modi","RL"],["STU0001238468","Jigar Lukhi","RL"],["STU0001238826","Param Modi","RL"],["IMS0001130994","Rishabh Mehta","RL"],["STU0001200868","Siyanshi Sharma","RL"]],"CAT 2627":[["STU0001240451","Heta Dave","AK"],["STU0001239578","Matin Haradwala","AK"],["IMS0000944784","Meet Shah","AK"]],"CAT 2628":[["STU0001238302","Vedansh Kamdar","RG"]],"CAT 2629":[["STU0001239791","Dhyey Bhalani","RG"],["STU0001237505","Kairav Damani","RG"],["STU0001239271","Priya Adhiya","RG"]],"CAT 2630":[["STU0001238818","Arya Patel","MS"],["STU0001240798","Het Prajapati","MS"],["STU0001165322","Kunjal Chandna","MS"],["STU0001238582","Manuush Doshi","MS"],["IMS0001115454","Preet Shah","MS"],["STU0001239955","Rishi Gunani","MS"],["STU0001240918","Shivam Singh","MS"],["STU0001189497","Tanisha Yadav","MS"],["STU0001234230","Umang Sukhadia","MS"],["STU0001208118","Yashvi Shah","MS"]],"CAT 2631":[["STU0001242337","Disha Bhavsar","GU"],["STU0001189506","Riishi Shah","GU"]],"CAT 2632":[["STU0001242123","Shachi Goenka","MA"],["STU0001243754","Vansh Sharma","MA"],["IMS0001141153","Vatsal Tripathi","MA"]],"CAT 2633":[["STU0001247910","Ved Karpatiya","GU"]],"CAT 2634":[["IMS0001038254","Arth Raval","AK"],["IMS0001139365","Jaydev Rajpara","AK"],["IMS0001157274","Jinil Chandarana","AK"],["STU0001171499","Karan Ahlani","AK"],["IMS0001157343","Samir Pandey","AK"],["IMS0001053206","Sujal Sathwara","AK"],["STU0001235856","Tanmay Jain","AK"],["IMS0001161152","Yashvee Sheth","AK"]],"CAT 2635":[["STU0001189977","Abhishek Gangishetty","MS"],["STU0001169810","Bhavya Shah","MS"],["IMS0001161553","Dilan Joseph","MS"],["IMS0001079450","Heer Vekariya","MS"],["IMS0001103767","Jainil Harani","MS"],["STU0001206084","Jayneel Patel","MS"],["IMS0001079574","Meet Chauhan","MS"],["IMS0000979121","Naman Shah","MS"],["IMS0001162105","Rudra Patel","MS"],["IMS0001153351","Smeet Shekhaliya","MS"],["IMS0000972679","Tanish Sethi","MS"]],"CAT 2636":[["STU0001252658","Aryan Mishra","AB"],["STU0001240550","Dhaval Patel","AB"],["STU0001255330","Ritisha Gulati","AB"]],"CAT 2637":[["STU0001254534","Debergha Chakraberty","MA"],["STU0001250500","Drashti Mali","MA"],["STU0001249542","Hetvi Prajapati","MA"],["STU0001253685","Raghu Raj Biyani","MA"],["STU0001251161","Ronit Parikh","MA"]],"CAT 2638":[["STU0001192379","Devansh Shah","MB"],["STU0001256385","Shreeta Shah","MB"]],"CAT 2639":[["IMS0001126163","Aarav Bhargava","RL"],["IMS0001126117","Abhi Thakkar","RL"],["IMS0001012755","Affankhan Pathan","RL"],["IMS0001013235","Avneet Kaur","RL"],["IMS0001110742","Dev Dharaiya","RL"],["IMS0001094478","Devanshi Kabra","RL"],["IMS0001119912","Dheer Maheshwari","RL"],["IMS0000985851","Hiya Thakkar","RL"],["STU0001167893","Jay Agarwal","RL"],["IMS0001155758","Jay Patel","RL"],["IMS0001044107","Kavya Shah","RL"],["IMS0000986311","Kritika Punjabi","RL"],["IMS0000988554","Manush Soni","RL"],["IMS0001090220","Meet Patel","RL"],["IMS0001071581","Mohit Parchani","RL"],["IMS0001109083","Naman Saraf","RL"],["IMS0001042196","Nikhil Jain","RL"],["IMS0001070439","Poojan Chavda","RL"],["IMS0001104449","Riddhi Bhargava","RL"],["IMS0001156408","Rishabh Riswadkar","RL"],["IMS0000895670","Shalin Bhavsar","RL"],["IMS0001099292","Shreya Patel","RL"],["IMS0000987975","Siddharaj Vig","RL"],["STU0001187160","Smriti Nair","RL"],["IMS0001078327","Suhani Bhura","RL"],["IMS0001159116","Tanuj Jain","RL"],["IMS0001019096","Vedant Bhavsar","RL"],["IMS0001049666","Vishwaraj Parmar","RL"]],"CAT 2640":[["STU0001213243","Dhruv Suri","MS"],["STU0001167337","Mudit Bansal","MS"],["IMS0001040565","Nishant Sharma","MS"],["IMS0001098693","Priya Kourani","MS"],["STU0001182102","Vihari Vadher","MS"]],"CAT 2641":[["STU0001259818","Dinil Shah","AB"],["STU0001260920","Ved Bechara","AB"]],"CAT 2642":[["IMS0001070170","Krish Rohira","AB"],["STU0001261633","Vedant Bhatt","AB"]],"CAT 2643":[["STU0001262965","Rishabh Vyas","AK"]],"CAT 2644":[["IMS0000955522","Bansil Talpara","MS"],["STU0001170608","Mokshil Jain","MS"]],"CAT 2645":[["STU0001165895","Mrusha B","MB"],["STU0001271220","Palak Nandoriya","MB"],["STU0001264511","Uddish Pilani","MB"]],"CAT 2647":[["STU0001276339","Kandarp Jani","MB"],["STU0001276059","Saksham Gupta","MB"]],"CAT 26 E101":[["STU0001206116","Moksh Vora",""],["STU0001186033","Shreya Raj",""]],"CAT 26 E102":[["IMS0001014163","Nikunj Jhawar",""]],"CAT 26 E104":[["STU0001233358","Lakshita Kothari",""]]};
 
 var $ = function (id) { return document.getElementById(id); };
 var batchSel = $("batch"), studentSel = $("student"), chip = $("chip"), manual = $("manual"),
-    mName = $("mName"), mPin = $("mPin"), commit = $("commit"), btn = $("submitBtn"), msg = $("msg");
+    mName = $("mName"), mPin = $("mPin"), mBatch = $("mBatch"), mBatchWrap = $("mBatchWrap"), nameWrap = $("nameWrap"), commit = $("commit"), btn = $("submitBtn"), msg = $("msg");
 var seatsFull = false, submitting = false;
 var connected = APPS_SCRIPT_URL.indexOf("script.google.com") !== -1;
 
 Object.keys(ROSTER).forEach(function (b) {
   var o = document.createElement("option"); o.value = b; o.textContent = b; batchSel.appendChild(o);
 });
+(function () { var o = document.createElement("option"); o.value = CANT_BATCH; o.textContent = "Can not find my batch"; batchSel.appendChild(o); })();
 
 batchSel.addEventListener("change", function () {
   studentSel.innerHTML = "";
   chip.classList.remove("show"); manual.classList.remove("show");
-  if (!batchSel.value) {
+  nameWrap.style.display = ""; mBatchWrap.style.display = "none";
+  if (batchSel.value === CANT_BATCH) {
+    studentSel.disabled = true;
+    nameWrap.style.display = "none"; mBatchWrap.style.display = "";
+    manual.classList.add("show"); mBatch.focus();
+  } else if (!batchSel.value) {
     studentSel.disabled = true;
     studentSel.innerHTML = '<option value="">Select your batch first</option>';
   } else {
@@ -192,14 +204,17 @@ studentSel.addEventListener("change", function () {
   hideMsg(); refreshBtn();
 });
 
-[mName, mPin].forEach(function (el) { el.addEventListener("input", refreshBtn); });
+[mName, mPin, mBatch].forEach(function (el) { el.addEventListener("input", refreshBtn); });
 mPin.addEventListener("input", function () { mPin.value = mPin.value.toUpperCase().replace(/\s+/g, ""); });
 commit.addEventListener("change", refreshBtn);
 
 function addOpt(sel, v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; sel.appendChild(o); }
 
 function formValid() {
-  if (!batchSel.value || studentSel.value === "" || !commit.checked) return false;
+  if (!batchSel.value || !commit.checked) return false;
+  var okName = mName.value.trim().length > 1 && /^(IMS|STU)\d{10}$/.test(mPin.value.trim());
+  if (batchSel.value === CANT_BATCH) return mBatch.value.trim().length > 1 && okName;
+  if (studentSel.value === "") return false;
   if (studentSel.value === CANT_FIND) return mName.value.trim().length > 1 && /^(IMS|STU)\d{10}$/.test(mPin.value.trim());
   return true;
 }
@@ -289,9 +304,10 @@ $("regForm").addEventListener("submit", function (e) {
   if (!formValid() || seatsFull) return;
   hideMsg();
 
-  var isManual = studentSel.value === CANT_FIND, payload;
+  var noBatch = batchSel.value === CANT_BATCH;
+  var isManual = noBatch || studentSel.value === CANT_FIND, payload;
   if (isManual) {
-    payload = { manual: true, batch: batchSel.value, name: mName.value.trim(), pin: mPin.value.trim() };
+    payload = { manual: true, batch: noBatch ? mBatch.value.trim().toUpperCase() : batchSel.value, name: mName.value.trim(), pin: mPin.value.trim() };
   } else {
     var s = ROSTER[batchSel.value][+studentSel.value];
     payload = { manual: false, batch: batchSel.value, name: s[1], pin: s[0] };
@@ -323,7 +339,7 @@ $("regForm").addEventListener("submit", function (e) {
 
 function resetForm() {
   batchSel.value = ""; batchSel.dispatchEvent(new Event("change"));
-  mName.value = ""; mPin.value = ""; commit.checked = false; refreshBtn();
+  mName.value = ""; mPin.value = ""; mBatch.value = ""; commit.checked = false; refreshBtn();
 }
 $("closeBtn").addEventListener("click", function () { $("overlay").classList.add("hidden"); });
 </script>
